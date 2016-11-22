@@ -13,31 +13,24 @@
 # the License.
 Import-Module ..\..\BuildTools.psm1 -DisableNameChecking
 
-$SUCCEEDED = $true
+$filesToProcess = "Program.cs", "QuickStart\QuickStart.cs", "Log4Net\log4net.config.xml"
 
-$quickStartCopy1 = [System.IO.Path]::GetTempFileName()
-$quickStartCopy2 = [System.IO.Path]::GetTempFileName()
-Copy-Item -Force Program.cs $quickStartCopy1
-Copy-Item -Force QuickStart\QuickStart.cs $quickStartCopy2
-try {
-    Get-Content $quickStartCopy1 | ForEach-Object { 
-        $_.Replace("YOUR-PROJECT-ID", $env:GOOGLE_PROJECT_ID)
-    } | Out-File -Encoding UTF8 Program.cs
-	Get-Content $quickStartCopy2 | ForEach-Object { 
-        $_.Replace("YOUR-PROJECT-ID", $env:GOOGLE_PROJECT_ID)
-    } | Out-File -Encoding UTF8 QuickStart\QuickStart.cs
+$filesToProcessForLogging = "LoggingTest\LoggingTest.cs", "Log4Net\log4net.config.xml"
+$testLogIdPrefix = "sampleLog"
+[string]$testLogIdSuffix = Get-Random
+$testLogID = $testLogIdPrefix + $testLogIdSuffix
 
-	
-    Build-Solution
+BackupAndEdit-TextFile $filesToProcessForLogging `
+    @{"YOUR-LOG-ID" = $testLogID} `
+    {
+        BackupAndEdit-TextFile $filesToProcess `
+            @{"YOUR-PROJECT-ID" = $env:GOOGLE_PROJECT_ID} `
+        {       
+            Build-Solution
+            packages\xunit.runner.console.2.1.0\tools\xunit.console.exe `
+                .\LoggingTest\bin\Debug\LoggingTest.dll `
+                -parallel none
+            if ($LASTEXITCODE -ne 0) { throw "FAILED" }
+        }
+    }
 
-    packages\xunit.runner.console.2.1.0\tools\xunit.console.exe `
-        .\LoggingTest\bin\Debug\LoggingTest.dll `
-        -parallel none
-	
-    $SUCCEEDED = $SUCCEEDED -and $LASTEXITCODE -eq 0
-} finally {
-    Copy-Item -Force $quickStartCopy1 Program.cs
-    Copy-Item -Force $quickStartCopy2 QuickStart\QuickStart.cs
-}
-
-if (-not $SUCCEEDED) { throw "FAILED" }
