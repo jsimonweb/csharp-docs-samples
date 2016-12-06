@@ -22,7 +22,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Collections.Generic;
 using Grpc.Core;
-using System.Linq;
 
 namespace GoogleCloudSamples
 {
@@ -38,19 +37,7 @@ namespace GoogleCloudSamples
         };
         private readonly RetryRobot _retryRobot = new RetryRobot()
         {
-            ShouldRetry = (Exception e) =>
-            {
-                if (e is Xunit.Sdk.XunitException)
-                    return true;
-                var rpcException = e as RpcException;
-                if (rpcException != null)
-                {
-                    return new[] { StatusCode.Aborted, StatusCode.Internal,
-                        StatusCode.Cancelled }
-                        .Contains(rpcException.Status.StatusCode);
-                }
-                return false;
-            },
+            RetryWhenExceptions = new[] { typeof(Xunit.Sdk.XunitException) },
             DelayMultiplier = 3
         };
 
@@ -244,40 +231,17 @@ namespace GoogleCloudSamples
                     sinkClient.GetSink(sinkName));
             }
 
-            private string GetConsoleAppOutput(string filePath, string path = "")
+            private string GetConsoleAppOutput(string filePath)
             {
                 string output = "";
                 Process consoleApp = new Process();
                 consoleApp.StartInfo.FileName = filePath;
                 consoleApp.StartInfo.UseShellExecute = false;
                 consoleApp.StartInfo.RedirectStandardOutput = true;
-                consoleApp.StartInfo.Arguments = path;
                 consoleApp.Start();
                 output = consoleApp.StandardOutput.ReadToEnd();
                 consoleApp.WaitForExit();
                 return output;
-            }
-
-            [Fact]
-            public void TestLog4NetConsoleApp()
-            {
-                string output;
-                string consoleApp = @"..\..\..\Log4Net\bin\Debug\Log4Net.exe";
-                string configFilePath = @"..\..\..\Log4Net\bin\Debug\";
-                string expectedOutput = "Log Entry created.";
-                // This logId should match the logId value set in Log4Net\log4net.config.xml
-                string logId = "YOUR-LOG-ID";
-                string message = "Hello World!";
-                _logsToDelete.Add(logId);
-                output = GetConsoleAppOutput(consoleApp, configFilePath).Trim();
-                Assert.Contains(expectedOutput, output);
-                Eventually(() =>
-                {
-                    // Retrieve the log entry just added, using the logId as a filter.
-                    var results = Run("list-log-entries", logId);
-                    // Confirm returned log entry contains expected value.
-                    Assert.Contains(message, results.Stdout);
-                });
             }
 
             [Fact]
