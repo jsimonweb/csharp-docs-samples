@@ -1,4 +1,4 @@
-# Google Cloud SQL and Google App Engine Flexible Environment
+# Google Cloud SQL with PostgreSQL and Google App Engine Flexible Environment
 
 This sample application demonstrates how to store data in Google Cloud SQL
 when running in Google App Engine Flexible Environment.
@@ -20,27 +20,19 @@ when running in Google App Engine Flexible Environment.
 	https://marketplace.visualstudio.com/items?itemName=GoogleCloudTools.GoogleCloudPlatformExtensionforVisualStudio)
     make it easy to deploy to App Engine.  Install them if you are running Visual Studio.
 
-4.  [Create a second generation Google Cloud SQL instance.](
-    https://cloud.google.com/sql/docs/mysql/create-instance).
-
-5.  Create a new database in your Google Cloud SQL instance.
-    
-    1.  Open your [Cloud SQL's Databases](
-        https://pantheon.corp.google.com/sql/instances/napoo/databases) and
-        click **New database**.
-
-    2.  For **Database name**, enter `visitors`.
-
-    3.  Click **ADD**.
+4.  [Create a PostgreSQL Cloud SQL instance.](
+    https://cloud.google.com/sql/docs/postgres/quickstart).
 
 5.  Configure SSL access to the Google Cloud SQL instance.
 
     1.  Open your [Cloud SQL's SSL settings.](
-        https://console.cloud.google.com/sql/instances/napoo/access-control/ssl)
+        https://pantheon.corp.google.com/sql/instances/)
 
-    2.  Click **Allow only SSL connections.**
+    2.  Click **Access Control**.
 
-    3.  Click **Create a client certificate.**
+	2.  Click **SSL**.
+
+    3.  Click **Create a client certificate**.
 
     4.  Enter a name like `aspnetcert` and click **ADD**.
 
@@ -48,14 +40,6 @@ when running in Google App Engine Flexible Environment.
         and `server-ca.pem`.
 
     6.  Click **Close**.
-
-    7.  Click **Users**.
-    
-    8.  Click **Create user account**.
-
-    9.  Enter a name like `aspnetuser` and a password.
-
-    10. Click **Create**.
 
     11. Click **Authorization**.
 
@@ -92,7 +76,7 @@ PS > dotnet run
 ```
 
 ### ![Visual Studio](../.resources/visual-studio.png)Using Visual Studio
-1.  In Solution Explorer, right-click the **CloudSql** project and choose **Set as StartUp Project**
+1.  In Solution Explorer, right-click the **CloudSql-PostgreSQL** project and choose **Set as StartUp Project**
 2.  Press F5.
 
 ## Deploy to App Engine
@@ -107,7 +91,7 @@ PS > gcloud beta app deploy .\bin\Debug\netcoreapp1.0\publish\app.yaml
 
 ### ![Visual Studio](../.resources/visual-studio.png)Using Visual Studio
 
-1.  In Solution Explorer, right-click the **CloudSql** project and choose **Publish CloudSql to Google Cloud**.
+1.  In Solution Explorer, right-click the **CloudSql-PostgreSQL** project and choose **Publish to Google Cloud**.
 
 2.  Click **App Engine Flex**.
 
