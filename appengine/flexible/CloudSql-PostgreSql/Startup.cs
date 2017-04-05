@@ -48,6 +48,23 @@ namespace CloudSql
         {
         }
 
+        NpgsqlConnection NewConnection()
+        {
+            // [START example]
+            var connectionString = new NpgsqlConnectionStringBuilder(Configuration["CloudSqlConnectionString"])
+            {
+                SslMode = SslMode.Require,
+                TrustServerCertificate = true,
+                UseSslStream = true
+            };
+            NpgsqlConnection connection = new NpgsqlConnection(connectionString.ConnectionString);
+            connection.ProvideClientCertificatesCallback +=
+                (X509CertificateCollection certs) => certs.Add(new X509Certificate2("client.pfx"));            
+            connection.Open();
+            // [END example]
+            return connection;
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -58,23 +75,14 @@ namespace CloudSql
                 app.UseDeveloperExceptionPage();
             }
 
-            NpgsqlConnection connection;
             try
             {
-                // [START example]
-                var connectionString = new NpgsqlConnectionStringBuilder(Configuration["CloudSqlConnectionString"])
+                NpgsqlConnection connection = NewConnection();
+                using (var createTableCommand = new NpgsqlCommand(@"CREATE TABLE IF NOT EXISTS visits
+                    (time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, user_ip CHAR(64))", connection))
                 {
-                    SslMode = SslMode.Require,
-                    TrustServerCertificate = true,
-                    UseSslStream = true
-                };
-                connection = new NpgsqlConnection(connectionString.ConnectionString);
-                connection.ProvideClientCertificatesCallback +=
-                    (X509CertificateCollection certs) => certs.Add(new X509Certificate2("client.pfx"));
-                connection.Open();
-                var createTableCommand = new NpgsqlCommand(@"CREATE TABLE IF NOT EXISTS visits
-                (time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, user_ip CHAR(64))", connection);
-                createTableCommand.ExecuteNonQuery();
+                    createTableCommand.ExecuteNonQuery();
+                }
                 // [END example]
             }
             catch (Exception e)
@@ -94,6 +102,14 @@ namespace CloudSql
 
             app.Run(async (HttpContext context) =>
             {
+                if (context.Request.Path.Value.EndsWith("favicon.ico"))
+                {
+                    // Avoid recording the same visitor twice when their browser requests
+                    // favicon.ico.
+                    context.Response.StatusCode = 404;
+                    return;
+                }
+                NpgsqlConnection connection = NewConnection();
                 // [START example]
                 // Insert a visit into the database:
                 using (var insertVisitCommand = new NpgsqlCommand(
