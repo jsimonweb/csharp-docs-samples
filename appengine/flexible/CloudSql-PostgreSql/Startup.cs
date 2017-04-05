@@ -24,6 +24,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CloudSql
 {
@@ -60,9 +61,16 @@ namespace CloudSql
             NpgsqlConnection connection;
             try
             {
-                string connectionString = Configuration["CloudSqlConnectionString"];
                 // [START example]
-                connection = new NpgsqlConnection(connectionString);
+                var connectionString = new NpgsqlConnectionStringBuilder(Configuration["CloudSqlConnectionString"])
+                {
+                    SslMode = SslMode.Require,
+                    TrustServerCertificate = true,
+                    UseSslStream = true
+                };
+                connection = new NpgsqlConnection(connectionString.ConnectionString);
+                connection.ProvideClientCertificatesCallback +=
+                    (X509CertificateCollection certs) => certs.Add(new X509Certificate2("client.pfx"));
                 connection.Open();
                 var createTableCommand = new NpgsqlCommand(@"CREATE TABLE IF NOT EXISTS visits
                 (time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, user_ip CHAR(64))", connection);
@@ -105,7 +113,7 @@ namespace CloudSql
                     List<string> lines = new List<string>();
                     var reader = await lookupCommand.ExecuteReaderAsync();
                     while (await reader.ReadAsync())
-                        lines.Add($"{reader.GetString(0)} {reader.GetString(1)}");
+                        lines.Add($"{reader.GetDateTime(0)} {reader.GetString(1)}");
                     await context.Response.WriteAsync(string.Format(@"<html>
                         <head><title>Visitor Log</title></head>
                         <body>Last 10 visits:<br>{0}</body>
