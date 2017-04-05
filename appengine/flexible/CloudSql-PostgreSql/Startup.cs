@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -56,14 +56,15 @@ namespace CloudSql
             {
                 app.UseDeveloperExceptionPage();
             }
-            MySqlConnection connection;
+
+            NpgsqlConnection connection;
             try
             {
                 string connectionString = Configuration["CloudSqlConnectionString"];
                 // [START example]
-                connection = new MySqlConnection(connectionString);
+                connection = new NpgsqlConnection(connectionString);
                 connection.Open();
-                var createTableCommand = new MySqlCommand(@"CREATE TABLE IF NOT EXISTS visits
+                var createTableCommand = new NpgsqlCommand(@"CREATE TABLE IF NOT EXISTS visits
                 (time_stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP, user_ip CHAR(64))", connection);
                 createTableCommand.ExecuteNonQuery();
                 // [END example]
@@ -87,7 +88,7 @@ namespace CloudSql
             {
                 // [START example]
                 // Insert a visit into the database:
-                using (var insertVisitCommand = new MySqlCommand(
+                using (var insertVisitCommand = new NpgsqlCommand(
                         @"INSERT INTO visits (user_ip) values (@user_ip)",
                         connection))
                 {
@@ -97,7 +98,7 @@ namespace CloudSql
                 }
 
                 // Look up the last 10 visits.
-                using (var lookupCommand = new MySqlCommand(
+                using (var lookupCommand = new NpgsqlCommand(
                     @"SELECT * FROM visits ORDER BY time_stamp DESC LIMIT 10",
                     connection))
                 {
