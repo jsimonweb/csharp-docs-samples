@@ -148,7 +148,6 @@ namespace GoogleCloudSamples
                 {
                     // Try listing the log entries.  There should be none.
                     var listed = Run("list-log-entries", logId);
-                    listed.AssertSucceeded();
                     Assert.Equal("", listed.Stdout.Trim());
                 });
             }
