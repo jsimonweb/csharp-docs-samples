@@ -107,11 +107,6 @@ namespace GoogleCloudSamples
                 {
                     Console.WriteLine($"{row.TextPayload.Trim()}");
                 }
-                else
-                {
-                    results.GetEnumerator().Dispose();
-                    break;
-                }
             }
         }
         // [END list_log_entries]
