@@ -100,7 +100,7 @@ namespace GoogleCloudSamples
             ProjectName projectName = new ProjectName(s_projectId);
             IEnumerable<string> projectIds = new string[] { projectName.ToString() };
             var results = client.ListLogEntries(projectIds, $"logName={logName.ToString()}",
-                "timestamp desc", null, null, RetryAWhile);
+                "timestamp desc");
             foreach (var row in results)
             {
                 if (row != null && !String.IsNullOrEmpty(row.TextPayload.Trim()))
