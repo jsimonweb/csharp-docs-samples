@@ -16,11 +16,8 @@ Import-Module -DisableNameChecking ..\..\..\BuildTools.psm1
 
 dotnet restore
 BackupAndEdit-TextFile "appsettings.json" `
-    @{"your-google-bucket-name" = $env:TEST_GOOGLE_BUCKET_NAME} `
+    @{"your-google-project-id" = $env:GOOGLE_PROJECT_ID} `
 {
 	dotnet build
-	if (Test-GcsObject -Bucket $env:TEST_GOOGLE_BUCKET_NAME -ObjectName sample.txt) {
-		Remove-GcsObject -Bucket $env:TEST_GOOGLE_BUCKET_NAME -ObjectName sample.txt
-	}
-	Run-KestrelTest 5570
+	Run-KestrelTest 5582
 }
