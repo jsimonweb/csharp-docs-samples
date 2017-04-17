@@ -19,28 +19,7 @@ var host = casper.cli.args[0];
 casper.start(host + '/', function (response) {
     console.log('Starting ' + host + '/');
     this.test.assertEquals(200, response.status);
-    this.test.assertSelectorHasText('H1', 'Cloud Storage Sample');
-    this.test.assertEquals("", this.fetchText('#content'));
-    this.fill('#TextForm', {
-        'content': 'sunshine',
-    }, false);
-    console.log('Filled form.');
-});
-
-casper.thenClick('#Submit', function (response) {
-    console.log('Submitted form.');
-    this.test.assertEquals(200, response.status);
-    this.test.assertSelectorHasText('#content', 'sunshine');
-    this.fill('#TextForm', {
-        'content': 'rain',
-    }, false);
-    console.log('Filled form.');
-});
-
-casper.thenClick('#Submit', function (response) {
-    console.log('Submitted form.');
-    this.test.assertEquals(200, response.status);
-    this.test.assertSelectorHasText('#content', 'rain');
+    this.test.assertSelectorHasText('H1', 'Stackdriver Sample');
 });
 
 casper.run(function () {

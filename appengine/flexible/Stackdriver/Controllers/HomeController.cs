@@ -16,32 +16,13 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Stackdriver.ViewModels;
-using System.IO;
 using System.Threading.Tasks;
-using System.Linq;
-using Google.Cloud.Storage.V1;
-using System.Text;
 using Microsoft.Extensions.Options;
-using Google;
-using Microsoft.Extensions.Logging;
-using Google.Cloud.Diagnostics.AspNetCore;
 
 namespace Stackdriver.Controllers
 {
-    // [START cloud_storage]
     public class HomeController : Controller
     {
-        // Contains the bucket name and object name
-        readonly StackdriverOptions _options;
-        // The Google Cloud Storage client.
-        readonly StorageClient _storage;
-
-        public HomeController(IOptions<StackdriverOptions> options)
-        {
-            _options = options.Value;
-            _storage = StorageClient.Create();
-        }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {

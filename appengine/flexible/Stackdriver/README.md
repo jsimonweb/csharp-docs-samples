@@ -1,6 +1,6 @@
-# Google Cloud Storage and Google App Engine Flexible Environment
+# Stackdriver and Google App Engine Flexible Environment
 
-This sample application demonstrates store data in Google Cloud Storage
+This sample application demonstrates Stackdriver logging, trace and error reporting
 when running in Google App Engine Flexible Environment.
 
 ## Prerequisites
@@ -19,16 +19,9 @@ when running in Google App Engine Flexible Environment.
 3.  [Google Cloud Tools for Visual Studio](
 	https://marketplace.visualstudio.com/items?itemName=GoogleCloudTools.GoogleCloudPlatformExtensionforVisualStudio)
     make it easy to deploy to App Engine.  Install them if you are running Visual Studio.
-
-4.  Create a Cloud Storage bucket and make it [publicly readable](
-	https://cloud.google.com/storage/docs/access-control/#applyacls).
-	Use any name for the bucket name.
-    ```ps1
-	gsutil mb gs://[your-bucket-name]
-	gsutil defacl set public-read gs://[your-bucket-name]
-	```
 	
-5.  Edit [appsettings.json](appsettings.json).  Replace `your-google-bucket-name` with your bucket name.
+5.  Edit [appsettings.json](appsettings.json).  Replace `your-google-project-id` with your project id.
+	
 
 ## Run Locally
 
@@ -39,7 +32,7 @@ PS > dotnet run
 ```
 
 ### ![Visual Studio](../.resources/visual-studio.png)Using Visual Studio
-1.  In Solution Explorer, right-click the **CloudStorage** project and choose **Set as StartUp Project**
+1.  In Solution Explorer, right-click the **Stackdriver** project and choose **Set as StartUp Project**
 2.  Press F5.
 
 ## Deploy to App Engine
@@ -54,7 +47,7 @@ PS > gcloud beta app deploy .\bin\Debug\netcoreapp1.0\publish\app.yaml
 
 ### ![Visual Studio](../.resources/visual-studio.png)Using Visual Studio
 
-1.  In Solution Explorer, right-click the **CloudStorage** project and choose **Publish CloudStorage to Google Cloud**.
+1.  In Solution Explorer, right-click the **Stackdriver** project and choose **Publish to Google Cloud**.
 
 2.  Click **App Engine Flex**.
 
