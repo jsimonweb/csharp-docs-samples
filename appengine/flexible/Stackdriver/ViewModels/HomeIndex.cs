@@ -19,5 +19,6 @@ namespace Stackdriver.ViewModels
 {
     public class HomeIndex
     {
+        public string ProjectId { get; set; }
     }
 }

@@ -23,10 +23,16 @@ namespace Stackdriver.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        readonly string _projectId;
+        public HomeController(IOptions<StackdriverOptions> options)
         {
-            var model = new HomeIndex();
+            _projectId = options.Value.ProjectId;
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var model = new HomeIndex() { ProjectId = _projectId };
             return View(model);
         }
 

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 }
+@model Stackdriver.ViewModels.HomeIndex
 
 <h1>Google Cloud Stackdriver Sample for ASP.NET Core</h1>
 
@@ -21,14 +22,14 @@
     <h3>Stackdriver Logging:</h3>
 <p>
     An example log entry has been created in your project.<br />
-    See the <a href="https://console.cloud.google.com/logs/viewer?filters=text:%22This%20is%20a%20log%20message%22" target="_blank">Stackdriver Logs Viewer</a> in the Google Cloud Console to view the sample log entry.
+    See the <a href="https://console.cloud.google.com/logs/viewer?project=@Model.ProjectId&filters=text:%22This%20is%20a%20log%20message%22&resource=global" target="_blank">Stackdriver Logs Viewer</a> in the Google Cloud Console to view the sample log entry.
 </p>
 <br />
 
     <h3>Stackdriver Trace:</h3>
 <p>
     Trace has been configured for use with this application.<br />
-    See the <a href="https://console.cloud.google.com/traces/overview" target="_blank">Stackdriver Trace</a> dashboard in the Google Cloud Console to view traces for your application.
+    See the <a href="https://console.cloud.google.com/traces/overview?project=@Model.ProjectId" target="_blank">Stackdriver Trace</a> dashboard in the Google Cloud Console to view traces for your application.
 </p>
 <br />
 
@@ -36,7 +37,7 @@
 <p>
     Error Reporting has been configured for use with this application.<br />
     Click the link below to create generic exception in your application that can be viewed
-    in the <a href="https://console.cloud.google.com/errors" target="_blank">
+    in the <a href="https://console.cloud.google.com/errors?project=@Model.ProjectId" target="_blank">
         Stackdriver Error Reporting
     </a> dashboard in the Google Cloud Console.
     <br />
