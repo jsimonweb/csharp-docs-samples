@@ -19,5 +19,19 @@ BackupAndEdit-TextFile "appsettings.json" `
     @{"your-google-project-id" = $env:GOOGLE_PROJECT_ID} `
 {
 	dotnet build
+	$before = Get-Date
 	Run-KestrelTest 5582
+	$after = Get-Date
+	# Wait for 1.5 minutes for the log entry to arrive.
+	$count = 30
+	while ($true) {
+		$log = Get-GcLogEntry -Project $env:GOOGLE_PROJECT_ID `
+			-LogName testStackdriverLogging -Before $after -After $before
+		if ($log) { break }
+		$count -= 1
+		if ($count -le 0) {
+			throw "Failed to find log entry."
+		}
+		Start-Sleep 3
+	}
 }
