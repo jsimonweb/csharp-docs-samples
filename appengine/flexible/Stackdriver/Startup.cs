@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Stackdriver
 {
@@ -40,9 +41,12 @@ namespace Stackdriver
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddOptions();
+            services.Configure<StackdriverOptions>(
+                Configuration.GetSection("StackDriver"));
+
             // Add trace service.
-            services.AddGoogleTrace("YOUR-PROJECT-ID");
+            services.AddGoogleTrace(Configuration["StackDriver:ProjectId"]);
             
             // Add framework services.
             services.AddMvc();
@@ -52,15 +56,15 @@ namespace Stackdriver
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             // Configure logging service.
-            loggerFactory.AddGoogle("YOUR-PROJECT-ID");
+            loggerFactory.AddGoogle(Configuration["StackDriver:ProjectId"]);
             var logger = loggerFactory.CreateLogger("testStackdriverLogging");
             logger.LogInformation("Stackdriver sample started. This is a log message.");
 
             // Configure error reporting service.
-            string projectId = "YOUR-PROJECT-ID";
-            string serviceName = "NAME-OF-YOUR-SERVICE";
-            string version = "VERSION-OF-YOUR-SERVCICE";
-            app.UseGoogleExceptionLogging(projectId, serviceName, version);
+            var options = app.ApplicationServices
+                .GetService<IOptions<StackdriverOptions>>().Value;
+            app.UseGoogleExceptionLogging(options.ProjectId, 
+                options.ServiceName, options.Version);
 
             // Configure trace service.
             app.UseGoogleTrace();

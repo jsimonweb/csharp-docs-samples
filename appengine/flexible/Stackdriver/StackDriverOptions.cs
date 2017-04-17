@@ -13,11 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 namespace Stackdriver
 {
     public class StackdriverOptions
     {
-        public string BucketName { get; set; }
-        public string ObjectName { get; set; } = "sample.txt";
+        public string ProjectId { get; set; }
+        public string ServiceName { get; set; }
+        public string Version { get; set; }
     }
 }
