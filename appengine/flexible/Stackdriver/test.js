@@ -22,6 +22,11 @@ casper.start(host + '/', function (response) {
     this.test.assertSelectorHasText('H1', 'Stackdriver Sample');
 });
 
+casper.thenOpen(host + '/ForceError', function (response) {
+    console.log('Simulating error ' + host + '/');
+    this.test.assertEquals(500, response.status);
+});
+
 casper.run(function () {
     this.test.done();
     this.test.renderResults(true);
