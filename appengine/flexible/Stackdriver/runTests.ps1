@@ -34,4 +34,16 @@ BackupAndEdit-TextFile "appsettings.json" `
 		}
 		Start-Sleep 3
 	}
+	$count = 30
+	# Wait for 1.5 minutes for the error reporting log entry to arrive.
+	while ($true) {
+	  $logged_error = Get-GcLogEntry -Project $env:GOOGLE_PROJECT_ID `
+	  -LogName stackdriver-error-reporting -Before $after -After $before
+	  if ($logged_error) { break }
+	  $count -= 1
+	  if ($count -le 0) {
+		throw "Failed to find error reporting entry."
+	  }
+	  Start-Sleep 3
+	}
 }
