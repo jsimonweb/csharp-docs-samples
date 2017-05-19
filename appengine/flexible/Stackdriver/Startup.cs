@@ -44,12 +44,12 @@ namespace Stackdriver
             // [START configure_services_logging_and_error_reporting]
             services.AddOptions();
             services.Configure<StackdriverOptions>(
-                Configuration.GetSection("StackDriver"));
+                Configuration.GetSection("Stackdriver"));
             // [END configure_services_logging_and_error_reporting]
 
             // [START configure_services_trace]
             // Add trace service.
-            services.AddGoogleTrace(Configuration["StackDriver:ProjectId"]);
+            services.AddGoogleTrace(Configuration["Stackdriver:ProjectId"]);
             // [END configure_services_trace]
 
             // Add framework services.
@@ -57,12 +57,14 @@ namespace Stackdriver
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // [START configure_and_use_logging]
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            // [START configure_and_use_logging]
             // Configure logging service.
-            loggerFactory.AddGoogle(Configuration["StackDriver:ProjectId"]);
+            loggerFactory.AddGoogle(Configuration["Stackdriver:ProjectId"]);
             var logger = loggerFactory.CreateLogger("testStackdriverLogging");
+
+            // Write the log entry.
             logger.LogInformation("Stackdriver sample started. This is a log message.");
             // [END configure_and_use_logging]
 
@@ -87,6 +89,8 @@ namespace Stackdriver
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            // [START configure_and_use_logging]
         }
+        // [END configure_and_use_logging]
     }
 }
