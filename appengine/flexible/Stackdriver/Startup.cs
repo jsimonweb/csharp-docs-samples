@@ -42,22 +42,31 @@ namespace Stackdriver
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // [START configure_services_logging]
-            // [START configure_services_error_reporting]
             services.AddOptions();
             services.Configure<StackdriverOptions>(
                 Configuration.GetSection("Stackdriver"));
-            // [END configure_services_logging]
-            services.AddGoogleExceptionLogging(
-                Configuration["Stackdriver:ProjectId"],
-                Configuration["Stackdriver:ServiceName"], 
-                Configuration["Stackdriver:Version"]);
+
+            // [START configure_services_error_reporting]
+            services.AddGoogleExceptionLogging(options =>
+            {
+                options.ProjectId = Configuration["Stackdriver:ProjectId"];
+                options.ServiceName = Configuration["Stackdriver:ServiceName"];
+                options.Version = Configuration["Stackdriver:Version"];
+            });
             // [END configure_services_error_reporting]
+            // [START configure_services_logging]
+            var webHost = new WebHostBuilder()
+                .ConfigureLogging((hostingContext, logging) =>
+                   logging.AddProvider(
+                       GoogleLoggerProvider.Create(
+                           Configuration["Stackdriver:ProjectId"])))
+                    .UseStartup<Startup>().Build();
+            // [END configure_services_logging]
 
             // [START configure_services_trace]
             // Add trace service.
-            TraceConfiguration traceConfig = TraceConfiguration.Create(bufferOptions: BufferOptions.NoBuffer());
-            services.AddGoogleTrace(Configuration["Stackdriver:ProjectId"], traceConfig);
+            services.AddGoogleTrace(options =>
+            { options.ProjectId = Configuration["Stackdriver:ProjectId"]; });
             // [END configure_services_trace]
 
             // Add framework services.
