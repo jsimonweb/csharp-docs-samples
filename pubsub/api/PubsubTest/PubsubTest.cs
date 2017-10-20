@@ -177,7 +177,7 @@ namespace GoogleCloudSamples
         }
 
         // [START retry]
-        public void RpcRetry(string topicId, string subscriptionId,
+        internal void RpcRetry(string topicId, string subscriptionId,
             PublisherClient publisher, SubscriberClient subscriber)
         {
             TopicName topicName = new TopicName(_projectId, topicId);
