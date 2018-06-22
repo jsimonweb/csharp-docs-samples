@@ -111,7 +111,7 @@ namespace GoogleCloudSamples.Bigtable
                 try
                 {
                     bigtableClient.MutateRow(tableNameClient, rowKeyPrefix + s_greetingIndex, MutationBuilder(s_greetingIndex));
-                    Console.WriteLine($"\tGreeting:   -- {s_greetings[s_greetingIndex], -18}-- written successfully");
+                    Console.WriteLine($"\tGreeting:   -- {s_greetings[s_greetingIndex],-18}-- written successfully");
                 }
                 catch (Exception ex)
                 {
@@ -145,7 +145,7 @@ namespace GoogleCloudSamples.Bigtable
                     s_greetingIndex = s_mapToOriginalGreetingIndex[(int)entry.Index];
                     if (entry.Status.Code == 0)
                     {
-                        Console.WriteLine($"\tGreeting:   -- {s_greetings[s_greetingIndex], -18}-- written successfully");
+                        Console.WriteLine($"\tGreeting:   -- {s_greetings[s_greetingIndex],-18}-- written successfully");
                     }
                     else
                     {
