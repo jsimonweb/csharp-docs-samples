@@ -47,33 +47,6 @@ namespace PlanetAuction.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new HomeIndex();
-            // if (new string[] { null, "", "your-google-bucket-name" }
-            //     .Contains(_options.BucketName))
-            // {
-            //     model.MissingBucketName = true;
-            //     return View(model);
-            // }
-            // try
-            // {
-            //     // Get the storage object.
-            //     var storageObject =
-            //         await _storage.GetObjectAsync(_options.BucketName, _options.ObjectName);
-            //     // Get a direct link to the storage object.
-            //     model.MediaLink = storageObject.MediaLink;
-            //     // Download the storage object.
-            //     MemoryStream m = new MemoryStream();
-            //     await _storage.DownloadObjectAsync(
-            //         _options.BucketName, _options.ObjectName, m);
-            //     m.Seek(0, SeekOrigin.Begin);
-            //     byte[] content = new byte[m.Length];
-            //     m.Read(content, 0, content.Length);
-            //     model.Content = Encoding.UTF8.GetString(content);
-            // }
-            // catch (GoogleApiException e)
-            // when (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
-            // {
-            //     // Does not exist yet.  No problem.
-            // }
             return View(model);
         }
 
@@ -81,17 +54,8 @@ namespace PlanetAuction.Controllers
         public async Task<IActionResult> Index(Form sendForm)
         {
             var model = new HomeIndex();
-            // Take the content uploaded in the form and upload it to
-            // Google Cloud Storage.
-            // await _storage.UploadObjectAsync(
-            //     _options.BucketName, _options.ObjectName, "text/plain",
-            //     new MemoryStream(Encoding.UTF8.GetBytes(sendForm.Content)));
             model.Content = sendForm.Content;
             model.SavedNewContent = true;
-            // var storageObject =
-            //     await _storage.GetObjectAsync(_options.BucketName, _options.ObjectName);
-            // model.MediaLink = storageObject.MediaLink;
-
 
             // Spanner connection string.
             string connectionString =
@@ -103,7 +67,6 @@ namespace PlanetAuction.Controllers
             if(string.IsNullOrEmpty(sendForm.PlayerId))
             {
                 // Insert Player Code
-                
                 using (var connection = new SpannerConnection(connectionString))
                 {
                     await connection.OpenAsync();
@@ -154,7 +117,7 @@ namespace PlanetAuction.Controllers
                     // Create statement to select a random planet
                     var cmd = connection.CreateSelectCommand(
                     "SELECT PlanetId, PlanetName, SharesAvailable, DIV(PlanetValue, SharesAvailable) as ShareCost "
-                    + "FROM (SELECT * FROM Planets TABLESAMPLE BERNOULLI (.1 PERCENT)) "
+                    + "FROM (SELECT * FROM Planets TABLESAMPLE BERNOULLI (10 PERCENT)) "
                     + "WHERE SharesAvailable > 0 LIMIT 1");
 
                     // Excecute the select query.
