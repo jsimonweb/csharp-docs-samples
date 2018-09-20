@@ -11,7 +11,7 @@ This Planet Auction sample application demonstrates Cloud Spanner integration ru
 
 3.  Install the [.NET Core SDK, version 2.0](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.5-download.md).
 
-4.  Use the PlanetAunctionAdmin console app to create and populate the Spanner database necessary
+4.  Use the [PlanetAunctionAdmin](../AdminConsoleApp/README.md) console app to create and populate the Spanner database necessary
     for this app to run as expected.
 
 5.  Edit [appsettings.json](appsettings.json).  Replace `ProjectId`, `InstanceId`, and `DatabaseId` with your project's values.
@@ -51,3 +51,15 @@ Open **PlanetAuction.csproj**, and Press **F5**.
 2.  Click **App Engine Flex**.
 
 3.  Click **Publish**.
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](../../../CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](../../../LICENSE)
+
+## Testing
+
+* See [TESTING.md](../../../TESTING.md)

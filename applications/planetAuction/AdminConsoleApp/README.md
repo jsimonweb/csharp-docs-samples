@@ -52,12 +52,12 @@ This sample requires [.NET Core 2.0](
 
 ## Contributing changes
 
-* See [CONTRIBUTING.md](../../CONTRIBUTING.md)
+* See [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 
 ## Licensing
 
-* See [LICENSE](../../LICENSE)
+* See [LICENSE](../../../LICENSE)
 
 ## Testing
 
-* See [TESTING.md](../../TESTING.md)
+* See [TESTING.md](../../../TESTING.md)
