@@ -1,6 +1,6 @@
 # Google Cloud Spanner and Google App Engine Flexible Environment
 
-This sample application demonstrates Cloud Spanner integration running in Google App Engine Flexible Environment.
+This Planet Auction sample application demonstrates Cloud Spanner integration running in Google App Engine Flexible Environment.
 
 ## Prerequisites
 
@@ -9,7 +9,10 @@ This sample application demonstrates Cloud Spanner integration running in Google
 2.  Install the [Google Cloud SDK](https://cloud.google.com/sdk/).  The Google Cloud SDK
     is required to deploy .NET applications to App Engine.
 
-3.  Install the [.NET Core SDK, version 1.1](https://github.com/dotnet/core/blob/master/release-notes/download-archives/1.1.4-download.md).
+3.  Install the [.NET Core SDK, version 2.0](https://github.com/dotnet/core/blob/master/release-notes/download-archives/2.0.5-download.md).
+
+4.  Use the PlanetAunctionAdmin console app to create and populate the Spanner database necessary
+    for this app to run as expected.
 
 5.  Edit [appsettings.json](appsettings.json).  Replace `ProjectId`, `InstanceId`, and `DatabaseId` with your project's values.
 
@@ -27,15 +30,11 @@ PS > dotnet run
 ```psm1
 PS > dotnet restore
 PS > dotnet publish
-PS > gcloud beta app deploy .\bin\Debug\netcoreapp1.1\publish\app.yaml
+PS > gcloud beta app deploy .\bin\Debug\netcoreapp2.0\publish\app.yaml
 ```
 
 
 ## ![Visual Studio](../.resources/visual-studio.png) Using Visual Studio 2017
-
-Visual Studio is *optional*.  An old, unmaintained branch of samples that work
-with Visual Studio 2015 is 
-[here](https://github.com/GoogleCloudPlatform/dotnet-docs-samples/tree/vs2015).
 
 [Google Cloud Tools for Visual Studio](
 https://marketplace.visualstudio.com/items?itemName=GoogleCloudTools.GoogleCloudPlatformExtensionforVisualStudio)

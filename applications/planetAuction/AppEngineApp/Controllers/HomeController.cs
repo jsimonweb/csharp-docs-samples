@@ -19,7 +19,6 @@ using PlanetAuction.ViewModels;
 using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
-using Google.Cloud.Storage.V1;
 using Google.Cloud.Spanner.Data;
 using Google.Cloud.Spanner.V1;
 using System.Text;
@@ -40,7 +39,7 @@ namespace PlanetAuction.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var model = new HomeIndex();
             return View(model);
