@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Google Inc.
+ * Copyright (c) 2018 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,13 +34,9 @@ namespace PlanetAuction.Controllers
         // Contains the bucket name and object name
         readonly PlanetAuctionOptions _options;
 
-        // The Google Cloud Storage client.
-        //readonly StorageClient _storage;
-
         public HomeController(IOptions<PlanetAuctionOptions> options)
         {
             _options = options.Value;
-            //_storage = StorageClient.Create();
         }
 
         [HttpGet]
@@ -153,7 +149,6 @@ namespace PlanetAuction.Controllers
                     }
                     if (planetDollars >= costPerShare && planetId != 0)
                     {
-
                         // Subtract 1 from planet's shares available.
                         using (cmd = connection.CreateUpdateCommand(
                             "Planets", new SpannerParameterCollection

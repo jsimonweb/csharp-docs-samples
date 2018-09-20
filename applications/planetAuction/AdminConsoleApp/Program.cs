@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Google Inc.
+ * Copyright (c) 2018 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -383,7 +383,7 @@ namespace GoogleCloudSamples.Spanner
                     // Create statement to select a random planet
                     var cmd = connection.CreateSelectCommand(
                     "SELECT PlanetId, PlanetName, SharesAvailable, DIV(PlanetValue, SharesAvailable) as ShareCost "
-                    + "FROM (SELECT * FROM Planets TABLESAMPLE BERNOULLI (.1 PERCENT)) "
+                    + "FROM (SELECT * FROM Planets TABLESAMPLE BERNOULLI (10 PERCENT)) "
                     + "WHERE SharesAvailable > 0 LIMIT 1");
                     //cmd.Transaction = transaction;
                     // Excecute the select query.
@@ -409,7 +409,7 @@ namespace GoogleCloudSamples.Spanner
                     // Create statement to select a random player.
                     cmd = connection.CreateSelectCommand(
                     "SELECT PlayerId, PlayerName, PlanetDollars FROM "
-                    + "(SELECT * FROM Players TABLESAMPLE BERNOULLI (.1 PERCENT)) "
+                    + "(SELECT * FROM Players TABLESAMPLE BERNOULLI (10 PERCENT)) "
                     + "WHERE PlanetDollars >= @costPerShare LIMIT 1",
                     new SpannerParameterCollection {{"costPerShare", SpannerDbType.Int64}});
                     cmd.Parameters["costPerShare"].Value = costPerShare;
